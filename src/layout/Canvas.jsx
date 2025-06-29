@@ -3,7 +3,7 @@ import { Camera } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { gradients, magicGradients, overlays, meshGradients, solidColors, raycastWallpepers } from '../../data/data';
+import { gradients, magicGradients, overlays, meshGradients, solidColors, raycastWallpapers } from '../../data/data';
 
 const Canvas = ({
     imageRadius,
@@ -13,7 +13,7 @@ const Canvas = ({
     uploadedImage,
     selectedOverlay,
     selectedMeshGradient,
-    selectedRaycastWallpeper,
+    selectedRaycastWallpaper,
     opacity,
     noiseAmount,
     imageScale,
@@ -122,7 +122,7 @@ const Canvas = ({
         uploadedImage,
         selectedOverlay,
         selectedMeshGradient,
-        selectedRaycastWallpeper,
+        selectedRaycastWallpaper,
         selectedMagicGradient,
         opacity,
         noiseAmount,
@@ -154,7 +154,7 @@ const Canvas = ({
     useEffect(() => {
         renderBackgroundLayer();
         compositeAllLayers();
-    }, [selectedGradient, backgroundColor, selectedMeshGradient, selectedRaycastWallpeper, selectedMagicGradient]);
+    }, [selectedGradient, backgroundColor, selectedMeshGradient, selectedRaycastWallpaper, selectedMagicGradient]);
 
     // Render mesh gradient when it changes
     useEffect(() => {
@@ -180,8 +180,8 @@ const Canvas = ({
 
     // Render raycast wallpaper when it changes
     useEffect(() => {
-        if (selectedRaycastWallpeper && selectedRaycastWallpeper !== 'none') {
-            const raycast = raycastWallpepers.find(m => m.id === selectedRaycastWallpeper);
+        if (selectedRaycastWallpaper && selectedRaycastWallpaper !== 'none') {
+            const raycast = raycastWallpapers.find(m => m.id === selectedRaycastWallpaper);
             if (raycast && raycast.src) {
                 const img = new Image();
                 img.setAttribute('decoding', 'sync');
@@ -198,7 +198,7 @@ const Canvas = ({
             renderBackgroundLayer();
             compositeAllLayers();
         }
-    }, [selectedRaycastWallpeper]);
+    }, [selectedRaycastWallpaper]);
 
 
     // Render overlay when it changes
@@ -362,7 +362,7 @@ const Canvas = ({
         }
 
         // Draw raycast wallpaper if selected
-        if (selectedRaycastWallpeper && selectedRaycastWallpeper !== 'none' && raycastImageRef.current) {
+        if (selectedRaycastWallpaper && selectedRaycastWallpaper !== 'none' && raycastImageRef.current) {
             ctx.drawImage(raycastImageRef.current, 0, 0, width, height);
             ctx.restore();
             return;

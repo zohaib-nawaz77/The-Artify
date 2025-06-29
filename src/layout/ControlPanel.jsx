@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 // Import the optimized slider component
 import OptimizedSlider from '../partials/OptimizedSlider';
-import { gradients, magicGradients, overlays, meshGradients, solidColors, raycastWallpepers } from '../../data/data';
+import { gradients, magicGradients, overlays, meshGradients, solidColors, raycastWallpapers } from '../../data/data';
 
 
 import {
@@ -34,8 +34,8 @@ const ControlPanel = ({
     setSelectedOverlay,
     selectedMeshGradient,
     setSelectedMeshGradient,
-    selectedRaycastWallpeper,
-    setSelectedRaycastWallpeper,
+    selectedRaycastWallpaper,
+    setSelectedRaycastWallpaper,
     backgroundColor,
     setBackgroundColor,
     uploadedImage,
@@ -267,19 +267,19 @@ const ControlPanel = ({
 
                 <TabsContent value="bg" className="pt-4">
 
-                    <Panel title="Raycast Wallpepers">
+                    <Panel title="Raycast Wallpapers">
                         <div className="grid grid-cols-4 gap-2">
-                            {raycastWallpepers.map(raycast => (
+                            {raycastWallpapers.map(raycast => (
                                 <motion.div
                                     key={raycast.id}
-                                    className={`h-10 w-full rounded-md cursor-pointer bg-gray-300 dark:bg-zinc-700 ${selectedRaycastWallpeper === raycast.id
+                                    className={`h-10 w-full rounded-md cursor-pointer bg-gray-300 dark:bg-zinc-700 ${selectedRaycastWallpaper === raycast.id
                                         ? 'border-1 border-primary dark:border-zinc-500'
                                         : 'border border-transparent'
                                         }`}
                                     whileHover={{ scale: 1.05 }}
                                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                                     onClick={() => {
-                                        setSelectedRaycastWallpeper(prev => prev === raycast.id ? null : raycast.id);
+                                        setSelectedRaycastWallpaper(prev => prev === raycast.id ? null : raycast.id);
                                         setSelectedGradient(null);
                                         setSelectedMeshGradient(null);
                                         setSelectedMagicGradient(null);
@@ -319,7 +319,7 @@ const ControlPanel = ({
                                     onClick={() => {
                                         setSelectedGradient(prev => prev === gradientKey ? null : gradientKey);
                                         setSelectedMagicGradient(null); // Optional: still allow only one type of gradient active
-                                        setSelectedRaycastWallpeper(null); // Optional: still allow only one type of gradient active
+                                        setSelectedRaycastWallpaper(null); // Optional: still allow only one type of gradient active
                                         setSelectedMeshGradient(null); // Optional: still allow only one type of gradient active
                                         setBackgroundColor('#ffffff'); // Reset background color when gradient is selected
                                     }}
@@ -364,7 +364,7 @@ const ControlPanel = ({
                                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                                     onClick={() => {
                                         setSelectedMeshGradient(prev => prev === mesh.id ? null : mesh.id);
-                                        setSelectedRaycastWallpeper(null);
+                                        setSelectedRaycastWallpaper(null);
                                         setSelectedMagicGradient(null);
                                         setSelectedGradient(null);
                                         setBackgroundColor('#ffffff');
@@ -406,7 +406,7 @@ const ControlPanel = ({
                                         setSelectedMagicGradient(prev => prev === magicKey ? null : magicKey);
                                         setSelectedGradient(null);
                                         setSelectedMeshGradient(null);
-                                        setSelectedRaycastWallpeper(null);
+                                        setSelectedRaycastWallpaper(null);
                                         setBackgroundColor('#ffffff');
                                     }}
                                 />

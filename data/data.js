@@ -93,15 +93,68 @@ export const overlays = [
 // Predefined mesh gradients
 export const meshGradients = [
   { id: "none", name: "None", src: null },
-  { id: "mesh-1", name: "mesh-1", src: "../images/mesh_gradients/mesh-1.webp" },
-  { id: "mesh-2", name: "mesh-2", src: "../images/mesh_gradients/mesh-2.webp" },
-  { id: "mesh-3", name: "mesh-3", src: "../images/mesh_gradients/mesh-3.webp" },
-  { id: "mesh-4", name: "mesh-4", src: "../images/mesh_gradients/mesh-4.webp" },
-  { id: "mesh-5", name: "mesh-5", src: "../images/mesh_gradients/mesh-5.webp" },
-  { id: "mesh-6", name: "mesh-6", src: "../images/mesh_gradients/mesh-6.webp" },
-  { id: "mesh-7", name: "mesh-7", src: "../images/mesh_gradients/mesh-7.webp" },
-  { id: "mesh-8", name: "mesh-8", src: "../images/mesh_gradients/mesh-8.webp" },
-  { id: "mesh-9", name: "mesh-9", src: "../images/mesh_gradients/mesh-9.webp" },
+  { id: "mesh-1", name: "mesh-1", src: "/images/mesh_gradients/mesh-1.webp" },
+  { id: "mesh-2", name: "mesh-2", src: "/images/mesh_gradients/mesh-2.webp" },
+  { id: "mesh-3", name: "mesh-3", src: "/images/mesh_gradients/mesh-3.webp" },
+  { id: "mesh-4", name: "mesh-4", src: "/images/mesh_gradients/mesh-4.webp" },
+  { id: "mesh-5", name: "mesh-5", src: "/images/mesh_gradients/mesh-5.webp" },
+  { id: "mesh-6", name: "mesh-6", src: "/images/mesh_gradients/mesh-6.webp" },
+  { id: "mesh-7", name: "mesh-7", src: "/images/mesh_gradients/mesh-7.webp" },
+  { id: "mesh-8", name: "mesh-8", src: "/images/mesh_gradients/mesh-8.webp" },
+  { id: "mesh-9", name: "mesh-9", src: "/images/mesh_gradients/mesh-9.webp" },
+];
+
+export const raycastWallpapers = [
+  {
+    id: "raycast-wallpaper-1",
+    name: "Raycast Wallpaper 1",
+    src: "/images/raycast_wallpapers/autumnal-peach.webp",
+  },
+  {
+    id: "raycast-wallpaper-2",
+    name: "Raycast Wallpaper 2",
+    src: "/images/raycast_wallpapers/blossom-2.webp",
+  },
+  {
+    id: "raycast-wallpaper-3",
+    name: "Raycast Wallpaper 3",
+    src: "/images/raycast_wallpapers/blushing-fire.webp",
+  },
+  {
+    id: "raycast-wallpaper-4",
+    name: "Raycast Wallpaper 4",
+    src: "/images/raycast_wallpapers/bright-rain.webp",
+  },
+  {
+    id: "raycast-wallpaper-5",
+    name: "Raycast Wallpaper 5",
+    src: "/images/raycast_wallpapers/floss.webp",
+  },
+  {
+    id: "raycast-wallpaper-6",
+    name: "Raycast Wallpaper 6",
+    src: "/images/raycast_wallpapers/glass-rainbow.webp",
+  },
+  {
+    id: "raycast-wallpaper-7",
+    name: "Raycast Wallpaper 7",
+    src: "../images/raycast_wallpapers/good-vibes.webp",
+  },
+  {
+    id: "raycast-wallpaper-8",
+    name: "Raycast Wallpaper 8",
+    src: "/images/raycast_wallpapers/moonrise.webp",
+  },
+  {
+    id: "raycast-wallpaper-9",
+    name: "Raycast Wallpaper 9",
+    src: "/images/raycast_wallpapers/ray-of-lights.webp",
+  },
+  {
+    id: "raycast-wallpaper-10",
+    name: "Raycast Wallpaper 10",
+    src: "/images/raycast_wallpapers/rose-thorn.webp",
+  },
 ];
 
 // Predefined solid colors
@@ -122,57 +175,4 @@ export const solidColors = [
   "#ff4d4d",
   "#ffcc00",
   "#00ccff",
-];
-
-export const raycastWallpepers = [
-  {
-    id: "raycast-wallpaper-1",
-    name: "Raycast Wallpaper 1",
-    src: "../images/raycast_wallpapers/autumnal-peach.webp",
-  },
-  {
-    id: "raycast-wallpaper-2",
-    name: "Raycast Wallpaper 2",
-    src: "../images/raycast_wallpapers/blossom-2.webp",
-  },
-  {
-    id: "raycast-wallpaper-3",
-    name: "Raycast Wallpaper 3",
-    src: "../images/raycast_wallpapers/blushing-fire.webp",
-  },
-  {
-    id: "raycast-wallpaper-4",
-    name: "Raycast Wallpaper 4",
-    src: "../images/raycast_wallpapers/bright-rain.webp",
-  },
-  {
-    id: "raycast-wallpaper-5",
-    name: "Raycast Wallpaper 5",
-    src: "../images/raycast_wallpapers/floss.webp",
-  },
-  {
-    id: "raycast-wallpaper-6",
-    name: "Raycast Wallpaper 6",
-    src: "../images/raycast_wallpapers/glass-rainbow.webp",
-  },
-  {
-    id: "raycast-wallpaper-7",
-    name: "Raycast Wallpaper 7",
-    src: "../images/raycast_wallpapers/good-vibes.webp",
-  },
-  {
-    id: "raycast-wallpaper-8",
-    name: "Raycast Wallpaper 8",
-    src: "../images/raycast_wallpapers/moonrise.webp",
-  },
-  {
-    id: "raycast-wallpaper-9",
-    name: "Raycast Wallpaper 9",
-    src: "../images/raycast_wallpapers/ray-of-lights.webp",
-  },
-  {
-    id: "raycast-wallpaper-10",
-    name: "Raycast Wallpaper 10",
-    src: "../images/raycast_wallpapers/rose-thorn.webp",
-  },
 ];
