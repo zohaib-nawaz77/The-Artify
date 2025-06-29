@@ -58,35 +58,35 @@ export const magicGradients = {
 // Predefined overlays
 export const overlays = [
   { id: "none", name: "None", src: null },
-  { id: "overlay-1", name: "Lines", src: "../images/overlays/overlay-1.webp" },
-  { id: "overlay-2", name: "Grid", src: "../images/overlays/overlay-2.webp" },
-  { id: "overlay-3", name: "Window", src: "../images/overlays/overlay-3.webp" },
-  { id: "overlay-4", name: "Curved", src: "../images/overlays/overlay-4.webp" },
-  { id: "overlay-5", name: "Dots", src: "../images/overlays/overlay-5.webp" },
+  { id: "overlay-1", name: "Lines", src: "/images/overlays/overlay-1.webp" },
+  { id: "overlay-2", name: "Grid", src: "/images/overlays/overlay-2.webp" },
+  { id: "overlay-3", name: "Window", src: "/images/overlays/overlay-3.webp" },
+  { id: "overlay-4", name: "Curved", src: "/images/overlays/overlay-4.webp" },
+  { id: "overlay-5", name: "Dots", src: "/images/overlays/overlay-5.webp" },
   {
     id: "overlay-6",
     name: "Lines 2",
-    src: "../images/overlays/overlay-6.webp",
+    src: "/images/overlays/overlay-6.webp",
   },
   {
     id: "overlay-7",
     name: "Lines 3",
-    src: "../images/overlays/overlay-7.webp",
+    src: "/images/overlays/overlay-7.webp",
   },
   {
     id: "overlay-8",
     name: "Lines 4",
-    src: "../images/overlays/overlay-8.webp",
+    src: "/images/overlays/overlay-8.webp",
   },
   {
     id: "overlay-9",
     name: "Lines 5",
-    src: "../images/overlays/overlay-9.webp",
+    src: "/images/overlays/overlay-9.webp",
   },
   {
     id: "overlay-10",
     name: "Lines 6",
-    src: "../images/overlays/overlay-10.webp",
+    src: "/images/overlays/overlay-10.webp",
   },
 ];
 

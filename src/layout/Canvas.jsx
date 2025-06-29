@@ -602,7 +602,7 @@ const Canvas = ({
             <canvas
                 id="canvas"
                 ref={canvasRef}
-                className="w-full h-full rounded-lg border border-border shadow-lg relative overflow-hidden"
+                className="w-full h-full rounded-lg border border-border shadow-lg overflow-hidden"
             />
             {!uploadedImage && (
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">

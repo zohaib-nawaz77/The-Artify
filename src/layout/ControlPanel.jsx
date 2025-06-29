@@ -67,7 +67,7 @@ const ControlPanel = ({
     ));
 
     return (
-        <div className="w-76 border-l border-border bg-muted/40 p-4 overflow-y-auto">
+        <div className="md:w-76 w-full border-l border-border bg-muted/40 p-4 overflow-y-auto">
             <div className="flex justify-between mb-6">
                 <div className="flex gap-2">
                     <TooltipProvider>

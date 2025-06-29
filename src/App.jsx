@@ -109,7 +109,7 @@ const App = () => {
   };
 
   return (
-    <div className="flex h-screen bg-background text-foreground">
+    <div className="md:flex md:flex-row flex-col h-screen bg-background text-foreground">
       {/* Main canvas area */}
       <Canvas
         selectedMagicGradient={selectedMagicGradient}
