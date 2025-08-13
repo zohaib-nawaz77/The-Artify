@@ -10,7 +10,7 @@ const App = () => {
   const [selectedGradient, setSelectedGradient] = useState('gradient-1');
   const [selectedMagicGradient, setSelectedMagicGradient] = useState('none');
   const [selectedMeshGradient, setSelectedMeshGradient] = useState(null);
-  const [selectedRaycastWallpeper, setSelectedRaycastWallpeper] = useState(null);
+  const [selectedRaycastWallpaper, setSelectedRaycastWallpaper] = useState(null);
   const [selectedOverlay, setSelectedOverlay] = useState(null);
   const [backgroundColor, setBackgroundColor] = useState('#ffffff');
   const [uploadedImage, setUploadedImage] = useState(null);
@@ -116,7 +116,7 @@ const App = () => {
         selectedGradient={selectedGradient}
         selectedOverlay={selectedOverlay}
         selectedMeshGradient={selectedMeshGradient}
-        selectedRaycastWallpeper={selectedRaycastWallpeper}
+        selectedRaycastWallpaper={selectedRaycastWallpaper}
         backgroundColor={backgroundColor}
         uploadedImage={uploadedImage}
         imageRadius={imageRadius}
@@ -144,8 +144,8 @@ const App = () => {
         setSelectedOverlay={setSelectedOverlay}
         selectedMeshGradient={selectedMeshGradient}
         setSelectedMeshGradient={setSelectedMeshGradient}
-        selectedRaycastWallpeper={selectedRaycastWallpeper}
-        setSelectedRaycastWallpeper={setSelectedRaycastWallpeper}
+        selectedRaycastWallpaper={selectedRaycastWallpaper}
+        setSelectedRaycastWallpaper={setSelectedRaycastWallpaper}
         backgroundColor={backgroundColor}
         setBackgroundColor={setBackgroundColor}
         uploadedImage={uploadedImage}
