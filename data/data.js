@@ -155,6 +155,71 @@ export const raycastWallpapers = [
     name: "Raycast Wallpaper 10",
     src: "/images/raycast_wallpapers/rose-thorn.webp",
   },
+  {
+    id: "raycast-wallpaper-11",
+    name: "Raycast Wallpaper 11",
+    src: "/images/raycast_wallpapers/blob.webp",
+  },
+  {
+    id: "raycast-wallpaper-12",
+    name: "Raycast Wallpaper 12",
+    src: "/images/raycast_wallpapers/blue_distortion_2.webp",
+  },
+  {
+    id: "raycast-wallpaper-13",
+    name: "Raycast Wallpaper 13",
+    src: "/images/raycast_wallpapers/chromatic_dark_1.webp",
+  },
+  {
+    id: "raycast-wallpaper-14",
+    name: "Raycast Wallpaper 14",
+    src: "/images/raycast_wallpapers/cube_mono.webp",
+  },
+  {
+    id: "raycast-wallpaper-15",
+    name: "Raycast Wallpaper 15",
+    src: "/images/raycast_wallpapers/cube_prod.webp",
+  },
+  {
+    id: "raycast-wallpaper-16",
+    name: "Raycast Wallpaper 16",
+    src: "/images/raycast_wallpapers/loupe-mono-dark.webp",
+  },
+  {
+    id: "raycast-wallpaper-17",
+    name: "Raycast Wallpaper 17",
+    src: "/images/raycast_wallpapers/loupe-mono-light.webp",
+  },
+  {
+    id: "raycast-wallpaper-18",
+    name: "Raycast Wallpaper 18",
+    src: "/images/raycast_wallpapers/loupe.webp",
+  },
+  {
+    id: "raycast-wallpaper-19",
+    name: "Raycast Wallpaper 19",
+    src: "/images/raycast_wallpapers/mono_dark_distortion_1.webp",
+  },
+  {
+    id: "raycast-wallpaper-20",
+    name: "Raycast Wallpaper 20",
+    src: "/images/raycast_wallpapers/mono_dark_distortion_2.webp",
+  },
+  {
+    id: "raycast-wallpaper-21",
+    name: "Raycast Wallpaper 21",
+    src: "/images/raycast_wallpapers/raycast-logo.webp",
+  },
+  {
+    id: "raycast-wallpaper-22",
+    name: "Raycast Wallpaper 22",
+    src: "/images/raycast_wallpapers/red_distortion_3.webp",
+  },
+  {
+    id: "raycast-wallpaper-23",
+    name: "Raycast Wallpaper 23",
+    src: "/images/raycast_wallpapers/red_distortion_4.webp",
+  },
 ];
 
 // Predefined solid colors
