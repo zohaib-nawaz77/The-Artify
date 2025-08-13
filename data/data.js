@@ -1,6 +1,7 @@
 // Predefined gradients
 export const gradients = {
-  "gradient-1": "linear-gradient(to bottom, #ff5f6d, #ff36d0, #6b2dff)",
+  "gradient-1":
+    "linear-gradient(135deg, #ff6432 12.8%, #ff0065 43.52%, #7b2eff 84.34%)",
   "gradient-2": "linear-gradient(to bottom, #13547a, #80d0c7)",
   "gradient-3": "linear-gradient(to bottom, #f6d365, #fda085)",
   "gradient-4": "linear-gradient(to bottom, #a18cd1, #fbc2eb)",
@@ -19,8 +20,7 @@ export const gradients = {
   "gradient-17": "linear-gradient(to bottom, #0a84ff, #6bbaff, #e5e7eb)", // macOS Monterey blue to light gray
   "gradient-18": "linear-gradient(to bottom, #00ff87, #00ddeb, #60efff)", // Discord nitro green to cyan sparkle
   "gradient-19": "linear-gradient(135deg, #000046, #1cb5e0)",
-  "gradient-20":
-    "linear-gradient(135deg, #ff6432 12.8%, #ff0065 43.52%, #7b2eff 84.34%)",
+  "gradient-20": "linear-gradient(to bottom, #ff5f6d, #ff36d0, #6b2dff)",
   "gradient-21":
     "linear-gradient(135deg, #00ffe0 12.8%, #0066ff 43.52%, #6600ff 84.34%)",
   "gradient-22": "linear-gradient(135deg, #43c6ac, #191654)",

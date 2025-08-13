@@ -89,7 +89,7 @@ const App = () => {
       backgroundColor,
       selectedOverlay,
       selectedMeshGradient,
-      selectedRaycastWallpeper,
+      selectedRaycastWallpaper,
       opacity,
       noiseAmount,
       uploadedImage,  //because you cant save an image in localStorage wo converting it to some string address thats why 64base dataurl

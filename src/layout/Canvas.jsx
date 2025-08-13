@@ -5,6 +5,18 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { gradients, magicGradients, overlays, meshGradients, solidColors, raycastWallpapers } from '../../data/data';
 
+// ---------- utils ----------
+const preloadImage = (src) =>
+    new Promise((resolve, reject) => {
+        const img = new Image();
+        img.decoding = 'sync';
+        img.loading = 'eager';
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
+    });
+
+
 const Canvas = ({
     imageRadius,
     selectedGradient,
@@ -26,7 +38,7 @@ const Canvas = ({
     const overlayLayerRef = useRef(null);
     const noiseLayerRef = useRef(null);
     const [canvasDimensions, setCanvasDimensions] = useState({ width: 0, height: 0, dpr: 1 });
-    const [shadowIntensity, setShadowIntensity] = useState(0.5); // Control shadow intensity
+    const [shadowIntensity, setShadowIntensity] = useState(0.6); // Control shadow intensity
     const imageObjectRef = useRef(null);
     const meshImageRef = useRef(null);
     const raycastImageRef = useRef(null);
@@ -53,7 +65,7 @@ const Canvas = ({
 
         // Store dimensions for later use
         setCanvasDimensions({ width, height, dpr });
-        
+
 
         // Initialize layers
         bgLayerRef.current = document.createElement('canvas');
@@ -158,70 +170,49 @@ const Canvas = ({
 
     // Render mesh gradient when it changes
     useEffect(() => {
-        if (selectedMeshGradient && selectedMeshGradient !== 'none') {
-            const mesh = meshGradients.find(m => m.id === selectedMeshGradient);
-            if (mesh && mesh.src) {
-                const img = new Image();
-                img.setAttribute('decoding', 'sync');
-                img.setAttribute('loading', 'eager');
-                img.src = mesh.src;
-                img.onload = () => {
-                    meshImageRef.current = img;
-                    renderBackgroundLayer();
-                    compositeAllLayers();
-                };
-            }
-        } else {
+        if (!selectedMeshGradient || selectedMeshGradient === 'none') {
             meshImageRef.current = null;
             renderBackgroundLayer();
             compositeAllLayers();
+            return;
         }
+        const mesh = meshGradients.find(m => m.id === selectedMeshGradient);
+        if (!mesh?.src) return;
+        preloadImage(mesh.src)
+            .then(img => { meshImageRef.current = img; })
+            .finally(() => { renderBackgroundLayer(); compositeAllLayers(); });
     }, [selectedMeshGradient]);
 
     // Render raycast wallpaper when it changes
     useEffect(() => {
-        if (selectedRaycastWallpaper && selectedRaycastWallpaper !== 'none') {
-            const raycast = raycastWallpapers.find(m => m.id === selectedRaycastWallpaper);
-            if (raycast && raycast.src) {
-                const img = new Image();
-                img.setAttribute('decoding', 'sync');
-                img.setAttribute('loading', 'eager');
-                img.src = raycast.src;
-                img.onload = () => {
-                    raycastImageRef.current = img;
-                    renderBackgroundLayer();
-                    compositeAllLayers();
-                };
-            }
-        } else {
-            raycastImageRef.current = null;
-            renderBackgroundLayer();
-            compositeAllLayers();
-        }
-    }, [selectedRaycastWallpaper]);
-
+  if (!selectedRaycastWallpaper || selectedRaycastWallpaper === 'none') {
+    raycastImageRef.current = null;
+    renderBackgroundLayer();
+    compositeAllLayers();
+    return;
+  }
+  const ray = raycastWallpapers.find(r => r.id === selectedRaycastWallpaper);
+  if (!ray?.src) return;
+  preloadImage(ray.src)
+    .then(img => { raycastImageRef.current = img; })
+    .finally(() => { renderBackgroundLayer(); compositeAllLayers(); });
+}, [selectedRaycastWallpaper]);
 
     // Render overlay when it changes
-    useEffect(() => {
-        if (selectedOverlay && selectedOverlay !== 'none') {
-            const overlay = overlays.find(o => o.id === selectedOverlay);
-            if (overlay && overlay.src) {
-                const img = new Image();
-                img.setAttribute('decoding', 'sync');
-                img.setAttribute('loading', 'eager');
-                img.src = overlay.src;
-                img.onload = () => {
-                    overlayImageRef.current = img;
-                    renderOverlayLayer();
-                    compositeAllLayers();
-                };
-            }
-        } else {
-            overlayImageRef.current = null;
-            clearLayer(overlayLayerRef.current);
-            compositeAllLayers();
-        }
-    }, [selectedOverlay]);
+ useEffect(() => {
+  if (!selectedOverlay || selectedOverlay === 'none') {
+    overlayImageRef.current = null;
+    clearLayer(overlayLayerRef.current);
+    compositeAllLayers();
+    return;
+  }
+  const overlay = overlays.find(o => o.id === selectedOverlay);
+  if (!overlay?.src) return;
+  preloadImage(overlay.src)
+    .then(img => { overlayImageRef.current = img; })
+    .finally(() => { renderOverlayLayer(); compositeAllLayers(); });
+}, [selectedOverlay]);
+
 
     // Render image layer when scale or radius changes
     useEffect(() => {
@@ -251,92 +242,98 @@ const Canvas = ({
     };
 
     // Parse gradient string to extract type, parameters, and color stops
-    const parseGradient = (gradientStr, width, height, dpr) => {
-        const linearMatch = gradientStr.match(/linear-gradient\(([^)]+)\)/);
-        const radialMatch = gradientStr.match(/radial-gradient\(([^)]+)\)/);
+   const parseGradient = (gradientStr, width, height, dpr) => {
+  const linearMatch = gradientStr.match(/linear-gradient\(([^)]+)\)/);
+  const radialMatch = gradientStr.match(/radial-gradient\(([^)]+)\)/);
 
-        // Apply DPR to dimensions for high-quality gradients
-        width = width * dpr;
-        height = height * dpr;
+  // physical pixels
+  const physW = width * dpr;
+  const physH = height * dpr;
 
-        if (linearMatch) {
-            const params = linearMatch[1].split(',').map(s => s.trim());
-            let angle = '0deg';
-            let colors = params;
+  const ctx = bgLayerRef.current.getContext('2d');
 
-            if (params[0].startsWith('to ') || params[0].match(/^\d+deg/)) {
-                angle = params.shift();
-            }
+  if (linearMatch) {
+    const params = linearMatch[1].split(',').map(s => s.trim());
+    let angle = '0deg';
+    let colors = params;
 
-            const colorStops = colors.map(color => {
-                const [col, stop] = color.split(' ');
-                return { color: col, stop: stop ? parseFloat(stop) / 100 : null };
-            });
+    if (params[0].startsWith('to ') || /^\d+deg/.test(params[0])) {
+      angle = params.shift();
+    }
 
-            let gradient;
-            if (angle.startsWith('to ')) {
-                const direction = angle.replace('to ', '');
-                if (direction === 'bottom') {
-                    gradient = bgLayerRef.current.getContext('2d').createLinearGradient(0, 0, 0, height);
-                } else if (direction === 'right') {
-                    gradient = bgLayerRef.current.getContext('2d').createLinearGradient(0, 0, width, 0);
-                } else if (direction === 'top') {
-                    gradient = bgLayerRef.current.getContext('2d').createLinearGradient(0, height, 0, 0);
-                } else if (direction === 'left') {
-                    gradient = bgLayerRef.current.getContext('2d').createLinearGradient(width, 0, 0, 0);
-                }
-            } else {
-                const deg = parseFloat(angle) * Math.PI / 180;
-                const dx = Math.cos(deg) * width;
-                const dy = Math.sin(deg) * height;
-                gradient = bgLayerRef.current.getContext('2d').createLinearGradient(
-                    width / 2 - dx / 2, height / 2 - dy / 2,
-                    width / 2 + dx / 2, height / 2 + dy / 2
-                );
-            }
+    const colorStops = colors.map(c => {
+      const [col, stop] = c.trim().split(' ');
+      return { color: col, stop: stop ? parseFloat(stop) / 100 : null };
+    });
 
-            colorStops.forEach(({ color, stop }, index) => {
-                gradient.addColorStop(stop || index / (colorStops.length - 1), color);
-            });
+    let g;
+    if (angle.startsWith('to ')) {
+      const dir = angle.replace('to ', '');
+      switch (dir) {
+        case 'bottom':
+          g = ctx.createLinearGradient(0, 0, 0, physH);
+          break;
+        case 'right':
+          g = ctx.createLinearGradient(0, 0, physW, 0);
+          break;
+        case 'top':
+          g = ctx.createLinearGradient(0, physH, 0, 0);
+          break;
+        case 'left':
+          g = ctx.createLinearGradient(physW, 0, 0, 0);
+          break;
+        default:
+          g = ctx.createLinearGradient(0, 0, physW, 0);
+      }
+    } else {
+      const rad = parseFloat(angle) * Math.PI / 180;
+      const dx = Math.cos(rad) * physW;
+      const dy = Math.sin(rad) * physH;
+      g = ctx.createLinearGradient(
+        physW / 2 - dx / 2,
+        physH / 2 - dy / 2,
+        physW / 2 + dx / 2,
+        physH / 2 + dy / 2
+      );
+    }
 
-            return gradient;
-        } else if (radialMatch) {
-            const params = radialMatch[1].split(',').map(s => s.trim());
-            let shapeAndPos = params[0];
-            let colors = params.slice(1);
+    colorStops.forEach(({ color, stop }, i) =>
+      g.addColorStop(stop ?? i / (colorStops.length - 1), color)
+    );
+    return g;
+  }
 
-            const shapeMatch = shapeAndPos.match(/(circle|ellipse)\s+at\s+(\d+%)\s+(\d+%)/);
-            let gradient;
-            if (shapeMatch) {
-                const [, shape, xPos, yPos] = shapeMatch;
-                const cx = (parseFloat(xPos) / 100) * width;
-                const cy = (parseFloat(yPos) / 100) * height;
-                gradient = bgLayerRef.current.getContext('2d').createRadialGradient(
-                    cx, cy, 0,
-                    cx, cy, Math.max(width, height) / 2
-                );
-            } else {
-                gradient = bgLayerRef.current.getContext('2d').createRadialGradient(
-                    width / 2, height / 2, 0,
-                    width / 2, height / 2, Math.max(width, height) / 2
-                );
-            }
+  if (radialMatch) {
+    const params = radialMatch[1].split(',').map(s => s.trim());
+    const shapePos = params[0];
+    const colors = params.slice(1);
 
-            const colorStops = colors.map(color => {
-                const [col, stop] = color.split(' ');
-                return { color: col, stop: stop ? parseFloat(stop) / 100 : null };
-            });
+    const m = shapePos.match(/(circle|ellipse)\s+at\s+(\d+%)\s+(\d+%)/);
+    const cx = m ? (parseFloat(m[2]) / 100) * physW : physW / 2;
+    const cy = m ? (parseFloat(m[3]) / 100) * physH : physH / 2;
 
-            colorStops.forEach(({ color, stop }, index) => {
-                gradient.addColorStop(stop || index / (colorStops.length - 1), color);
-            });
+    const g = ctx.createRadialGradient(
+      cx,
+      cy,
+      0,
+      cx,
+      cy,
+      Math.max(physW, physH) / 2
+    );
 
-            return gradient;
-        }
+    const colorStops = colors.map(c => {
+      const [col, stop] = c.trim().split(' ');
+      return { color: col, stop: stop ? parseFloat(stop) / 100 : null };
+    });
 
+    colorStops.forEach(({ color, stop }, i) =>
+      g.addColorStop(stop ?? i / (colorStops.length - 1), color)
+    );
+    return g;
+  }
 
-        return null;
-    };
+  return null;
+};
 
     // Render background layer (gradient, magic gradient, mesh, or solid color)
     const renderBackgroundLayer = () => {
