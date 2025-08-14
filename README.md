@@ -1,12 +1,32 @@
-# React + Vite
+# Image Canvas Studio (Vite + React App)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A responsive web tool for image customization and gradient exploration.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Image Upload**: Drag & drop or paste images directly (Ctrl+V)
+- **Gradient Picker**: 24+ preset gradient backgrounds with smooth transitions
+- **Solid Color Palette**: 18+ single-color background options
+- **Mesh Gradient Options**: Advanced gradient patterns
+- **Responsive Interface**: Works on all screen sizes
+- **Dark Mode Support**: Optimized UI for better viewing comfort
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+**Technologies**
+
+React.js with Vite
+Tailwind CSS for styling
+HTML5 Canvas API for image manipulation
+Responsive design patterns
+
+
+
+**Project Structure**
+
+src/
+├── components/     # UI components
+├── styles/         # Global styles and utilities
+├── assets/         # Image assets and gradients
+├── App.jsx         # Main application component
+└── index.jsx       # Entry point
