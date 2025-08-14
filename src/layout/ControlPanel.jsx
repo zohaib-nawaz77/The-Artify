@@ -16,7 +16,7 @@ import {
     TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { motion } from 'framer-motion';
+import { motion } from "motion/react"
 import { toast } from 'sonner';
 
 const ControlPanel = ({
@@ -32,6 +32,10 @@ const ControlPanel = ({
     setSelectedMagicGradient,
     selectedOverlay,
     setSelectedOverlay,
+    shadowSpread,
+    setShadowSpread,
+    imageRotation,
+    setImageRotation,
     selectedMeshGradient,
     setSelectedMeshGradient,
     selectedRaycastWallpaper,
@@ -257,6 +261,30 @@ const ControlPanel = ({
                                     step={1}
                                     formatValue={(val) => val.toFixed(0)}
                                     unit="px"
+                                />
+                            </Panel>
+
+                            <Panel title="Image Shadow Spread">
+                                <OptimizedSlider
+                                    label="Shadow Spread"
+                                    value={shadowSpread}
+                                    onChange={setShadowSpread}
+                                    min={0}
+                                    max={100}
+                                    step={1}
+                                    unit="px"
+                                />
+                            </Panel>
+
+                            <Panel title="Image Rotation">
+                                <OptimizedSlider
+                                    label="Rotation"
+                                    value={imageRotation}
+                                    onChange={setImageRotation}
+                                    min={-180}
+                                    max={180}
+                                    step={1}
+                                    unit="°"
                                 />
                             </Panel>
                         </>

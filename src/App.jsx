@@ -16,6 +16,8 @@ const App = () => {
   const [uploadedImage, setUploadedImage] = useState(null);
   const [imageScale, setImageScale] = useState(1);
   const [imageRadius, setImageRadius] = useState(8);
+  const [shadowSpread, setShadowSpread] = useState(20);
+const [imageRotation, setImageRotation] = useState(0);
   const [theme, setTheme] = useState('light');
   const [activeTab, setActiveTab] = useState('bg'); // Track active tab
 
@@ -121,6 +123,8 @@ const App = () => {
         uploadedImage={uploadedImage}
         imageRadius={imageRadius}
         setImageRadius={setImageRadius}
+        shadowSpread={shadowSpread}
+imageRotation={imageRotation}
         opacity={opacity}
         noiseAmount={noiseAmount}
         imageScale={imageScale}
@@ -130,6 +134,10 @@ const App = () => {
 
       {/* Sidebar controls */}
       <ControlPanel
+      shadowSpread={shadowSpread}
+setShadowSpread={setShadowSpread}
+imageRotation={imageRotation}
+setImageRotation={setImageRotation}
         imageRadius={imageRadius}
         setImageRadius={setImageRadius}
         opacity={opacity}

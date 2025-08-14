@@ -28,6 +28,8 @@ const Canvas = ({
     selectedRaycastWallpaper,
     opacity,
     noiseAmount,
+    shadowSpread,
+imageRotation,
     imageScale,
     handleFileInput,
     handleScreenshot
@@ -220,7 +222,7 @@ const Canvas = ({
             renderImageLayer();
             compositeAllLayers();
         }
-    }, [imageScale, imageRadius]);
+    }, [imageScale, imageRadius, imageRotation, shadowSpread]);
 
     // Update overlay opacity
     useEffect(() => {
@@ -396,105 +398,92 @@ const Canvas = ({
     };
 
     // Render image layer with shadow effect
-    const renderImageLayer = () => {
-        if (!imgLayerRef.current || !imageObjectRef.current || canvasDimensions.width === 0) return;
+  const renderImageLayer = () => {
+  if (!imgLayerRef.current || !imageObjectRef.current || canvasDimensions.width === 0) return;
 
-        const ctx = imgLayerRef.current.getContext('2d');
-        const { width, height, dpr } = canvasDimensions;
+  const ctx = imgLayerRef.current.getContext('2d');
+  const { width, height, dpr } = canvasDimensions;
 
-        // Clear previous content
-        ctx.clearRect(0, 0, imgLayerRef.current.width, imgLayerRef.current.height);
+  // Clear previous content
+  ctx.clearRect(0, 0, imgLayerRef.current.width, imgLayerRef.current.height);
 
-        // Save the context state and scale for DPR
-        ctx.save();
-        ctx.scale(dpr, dpr);
+  // Save context and scale for DPR
+  ctx.save();
+  ctx.scale(dpr, dpr);
 
-        // Ensure crisp image rendering
-        ctx.imageSmoothingEnabled = true;
-        ctx.imageSmoothingQuality = 'high';
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
 
-        const img = imageObjectRef.current;
-        const maxImageScale = 0.8;
+  const img = imageObjectRef.current;
+  const maxImageScale = 0.8;
 
-        // Calculate image dimensions
-        const scale = Math.min(width / img.width, height / img.height) * (imageScale || 1) * maxImageScale;
-        const imgWidth = img.width * scale;
-        const imgHeight = img.height * scale;
-        const x = (width - imgWidth) / 2;
-        const y = (height - imgHeight) / 2;
+  // Calculate image size
+  const scale = Math.min(width / img.width, height / img.height) * (imageScale || 1) * maxImageScale;
+  const imgWidth = img.width * scale;
+  const imgHeight = img.height * scale;
 
-        // Add shadow effect
-        ctx.save();
+  // Center position
+  const cx = width / 2;
+  const cy = height / 2;
 
-        // Shadow properties - elegant box shadow effect
-        ctx.shadowColor = `rgba(0, 0, 0, ${shadowIntensity})`;
-        ctx.shadowBlur = 50 * dpr; // Scale shadow blur with DPR for consistency
-        ctx.shadowOffsetX = 30;
-        ctx.shadowOffsetY = 35;
+  // Save again for shadow + rotation
+  ctx.save();
 
-        // Create a path for the image (with or without rounded corners)
-        ctx.beginPath();
-        if (imageRadius > 0) {
-            const radius = imageRadius * scale;
-            ctx.moveTo(x + radius, y);
-            ctx.arcTo(x + imgWidth, y, x + imgWidth, y + imgHeight, radius);
-            ctx.arcTo(x + imgWidth, y + imgHeight, x, y + imgHeight, radius);
-            ctx.arcTo(x, y + imgHeight, x, y, radius);
-            ctx.arcTo(x, y, x + imgWidth, y, radius);
-        } else {
-            ctx.rect(x, y, imgWidth, imgHeight);
-        }
-        ctx.closePath();
+  // Move origin to center for rotation
+  ctx.translate(cx, cy);
+  ctx.rotate(imageRotation * Math.PI / 180);
+  ctx.translate(-imgWidth / 2, -imgHeight / 2);
 
-        // Fill with a transparent color to create shadow
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.9)';
-        ctx.fill();
+  // Apply shadow
+  ctx.shadowColor = `rgba(0, 0, 0, ${shadowIntensity})`;
+  ctx.shadowBlur = shadowSpread * dpr;
+  ctx.shadowOffsetX = 30;
+  ctx.shadowOffsetY = 35;
 
-        // Reset shadow for the actual image
-        ctx.shadowColor = 'transparent';
-        ctx.shadowBlur = 0;
-        ctx.shadowOffsetX = 0;
-        ctx.shadowOffsetY = 0;
+  // Optional rounded-rect path for clipping & shadow
+  const drawPath = () => {
+    ctx.beginPath();
+    if (imageRadius > 0) {
+      const radius = imageRadius * scale;
+      ctx.moveTo(radius, 0);
+      ctx.arcTo(imgWidth, 0, imgWidth, imgHeight, radius);
+      ctx.arcTo(imgWidth, imgHeight, 0, imgHeight, radius);
+      ctx.arcTo(0, imgHeight, 0, 0, radius);
+      ctx.arcTo(0, 0, imgWidth, 0, radius);
+      ctx.closePath();
+    } else {
+      ctx.rect(0, 0, imgWidth, imgHeight);
+    }
+  };
 
-        // Clip to image shape for actual image drawing
-        if (imageRadius > 0) {
-            ctx.beginPath();
-            const radius = imageRadius * scale;
-            ctx.moveTo(x + radius, y);
-            ctx.arcTo(x + imgWidth, y, x + imgWidth, y + imgHeight, radius);
-            ctx.arcTo(x + imgWidth, y + imgHeight, x, y + imgHeight, radius);
-            ctx.arcTo(x, y + imgHeight, x, y, radius);
-            ctx.arcTo(x, y, x + imgWidth, y, radius);
-            ctx.closePath();
-            ctx.clip();
-        }
+  // Draw shadow shape
+  drawPath();
+  ctx.fillStyle = 'rgba(0,0,0,0.9)';
+  ctx.fill();
 
-        // Draw actual image with highest quality
-        ctx.drawImage(img, 0, 0, img.width, img.height, x, y, imgWidth, imgHeight);
+  // Reset shadow for actual image
+  ctx.shadowColor = 'transparent';
+  ctx.shadowBlur = 0;
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 0;
 
-        // Draw subtle border to enhance the shadow effect
-        if (imageRadius > 0) {
-            ctx.beginPath();
-            const radius = imageRadius * scale;
-            ctx.moveTo(x + radius, y);
-            ctx.arcTo(x + imgWidth, y, x + imgWidth, y + imgHeight, radius);
-            ctx.arcTo(x + imgWidth, y + imgHeight, x, y + imgHeight, radius);
-            ctx.arcTo(x, y + imgHeight, x, y, radius);
-            ctx.arcTo(x, y, x + imgWidth, y, radius);
-            ctx.closePath();
-            ctx.strokeStyle = 'rgba(0, 0, 0, 0.08)';
-            ctx.lineWidth = 1;
-            ctx.stroke();
-        } else {
-            ctx.strokeStyle = 'rgba(0, 0, 0, 0.08)';
-            ctx.lineWidth = 1;
-            ctx.strokeRect(x, y, imgWidth, imgHeight);
-        }
+  // Clip and draw image
+  if (imageRadius > 0) {
+    drawPath();
+    ctx.clip();
+  }
+  ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, imgWidth, imgHeight);
 
-        ctx.restore(); // Restore from clip/shadow state
-        ctx.restore(); // Restore from DPR scaling
-    };
+  // Subtle border
+  ctx.strokeStyle = 'rgba(0,0,0,0.08)';
+  ctx.lineWidth = 1;
+  drawPath();
+  ctx.stroke();
 
+  // Restore transformations
+  ctx.restore();
+  ctx.restore();
+};
     // Render overlay layer
     const renderOverlayLayer = () => {
         if (!overlayLayerRef.current || canvasDimensions.width === 0) return;
