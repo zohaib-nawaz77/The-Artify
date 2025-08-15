@@ -1,5 +1,5 @@
 import React from 'react';
-import { Download, Save, Crop, Moon, Sun, Layout, Palette, Droplet } from 'lucide-react';
+import { Download, Save, Crop, Moon, Sun, Layout, Palette, Sparkles } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
@@ -164,16 +164,16 @@ const ControlPanel = ({
                             <Palette className="h-4 w-4" />
                         )}
                     </TabsTrigger>
-                    <TabsTrigger value="colors" className="flex items-center justify-center">
-                        {activeTab === "colors" ? (
+                    <TabsTrigger value="effects" className="flex items-center justify-center">
+                        {activeTab === "effects" ? (
                             <motion.span variants={textVariants}
                                 initial="hidden"
                                 animate="visible" className="flex items-center gap-1 text-xs">
-                                <Droplet className="h-4 w-4" />
-                                Colors
+                                <Sparkles className="h-4 w-4" />
+                                Effects
                             </motion.span>
                         ) : (
-                            <Droplet className="h-4 w-4" />
+                            <Sparkles className="h-4 w-4" />
                         )}
                     </TabsTrigger>
                 </TabsList>
@@ -223,15 +223,17 @@ const ControlPanel = ({
                     </Panel>
 
                     <Panel title="Noise">
-                        <div className="mb-1 flex justify-between items-center">
+                        {/* <div className="mb-1 flex justify-between items-center">
                             <span className="text-xs text-muted-foreground">Noise Amount</span>
                             <Badge variant="outline">{noiseAmount}</Badge>
-                        </div>
-                        <Slider
-                            defaultValue={[noiseAmount]}
+                        </div> */}
+                        <OptimizedSlider
+                            label="Noise Amount"
+                            value={noiseAmount}
+                            onChange={setNoiseAmount}
                             min={0}
                             max={100}
-                            onValueChange={(value) => setNoiseAmount(value[0])}
+                            step={1}
                             className="py-2"
                         />
                     </Panel>

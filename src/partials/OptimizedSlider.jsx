@@ -1,9 +1,7 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Slider } from '@/components/ui/slider';
 import { Badge } from '@/components/ui/badge';
-import { debounce } from 'lodash-es';
 
-// Optimized slider component that prevents unnecessary re-renders
 const OptimizedSlider = React.memo(({
   label,
   value,
@@ -14,27 +12,15 @@ const OptimizedSlider = React.memo(({
   formatValue = (val) => val.toFixed(1),
   unit = '',
 }) => {
-  // Local state to update UI immediately while dragging
   const [localValue, setLocalValue] = useState(value);
-  
-  // Update local value when prop changes
+
+  // Sync external value only when the user is *not* dragging.
   useEffect(() => {
     setLocalValue(value);
   }, [value]);
-  
-  // Create debounced version of onChange with lodash-es
-  const debouncedOnChange = useCallback(
-    debounce((newValue) => {
-      onChange(newValue);
-    }, 100),
-    [onChange]
-  );
-  
-  // Handle slider changes
-  const handleChange = useCallback((newValue) => {
-    setLocalValue(newValue[0]);
-    debouncedOnChange(newValue[0]);
-  }, [debouncedOnChange]);
+
+  const handleChange = ([v]) => setLocalValue(v);
+  const handleCommit = ([v]) => onChange(v);
 
   return (
     <div className="w-full">
@@ -48,6 +34,7 @@ const OptimizedSlider = React.memo(({
         max={max}
         step={step}
         onValueChange={handleChange}
+        onValueCommit={handleCommit}
         className="py-2"
       />
     </div>
@@ -55,5 +42,4 @@ const OptimizedSlider = React.memo(({
 });
 
 OptimizedSlider.displayName = 'OptimizedSlider';
-
 export default OptimizedSlider;
