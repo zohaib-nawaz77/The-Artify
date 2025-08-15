@@ -46,6 +46,11 @@ const ControlPanel = ({
     setUploadedImage,
     imageScale,
     setImageScale,
+    blur, setBlur,
+    brightness, setBrightness,
+    contrast, setContrast,
+    saturate, setSaturate,
+    hueRotate, setHueRotate,
     theme,
     activeTab,
     setActiveTab,
@@ -222,22 +227,6 @@ const ControlPanel = ({
                         />
                     </Panel>
 
-                    <Panel title="Noise">
-                        {/* <div className="mb-1 flex justify-between items-center">
-                            <span className="text-xs text-muted-foreground">Noise Amount</span>
-                            <Badge variant="outline">{noiseAmount}</Badge>
-                        </div> */}
-                        <OptimizedSlider
-                            label="Noise Amount"
-                            value={noiseAmount}
-                            onChange={setNoiseAmount}
-                            min={0}
-                            max={100}
-                            step={1}
-                            className="py-2"
-                        />
-                    </Panel>
-
                     {uploadedImage && (
                         <>
                             <Panel title="Image Size">
@@ -253,42 +242,7 @@ const ControlPanel = ({
                                 />
 
                             </Panel>
-                            <Panel title="Image Border Radius">
-                                <OptimizedSlider
-                                    label="Border Radius"
-                                    value={imageRadius}
-                                    onChange={setImageRadius}
-                                    min={0}
-                                    max={100}
-                                    step={1}
-                                    formatValue={(val) => val.toFixed(0)}
-                                    unit="px"
-                                />
-                            </Panel>
 
-                            <Panel title="Image Shadow Spread">
-                                <OptimizedSlider
-                                    label="Shadow Spread"
-                                    value={shadowSpread}
-                                    onChange={setShadowSpread}
-                                    min={0}
-                                    max={100}
-                                    step={1}
-                                    unit="px"
-                                />
-                            </Panel>
-
-                            <Panel title="Image Rotation">
-                                <OptimizedSlider
-                                    label="Rotation"
-                                    value={imageRotation}
-                                    onChange={setImageRotation}
-                                    min={-180}
-                                    max={180}
-                                    step={1}
-                                    unit="°"
-                                />
-                            </Panel>
                         </>
                     )}
 
@@ -445,8 +399,8 @@ const ControlPanel = ({
                     </Panel>
                 </TabsContent>
 
-                <TabsContent value="colors" className="pt-4">
-                    <Panel title="Marble Textures">
+                <TabsContent value="effects" className="pt-4">
+                    {/* <Panel title="Marble Textures">
                         <div className="grid grid-cols-3 gap-2">
                             {[1, 2, 3, 4, 5, 6].map(i => (
                                 <div
@@ -456,7 +410,124 @@ const ControlPanel = ({
                                 />
                             ))}
                         </div>
+                    </Panel> */}
+
+
+
+                    <Panel title="Noise">
+                        {/* <div className="mb-1 flex justify-between items-center">
+                            <span className="text-xs text-muted-foreground">Noise Amount</span>
+                            <Badge variant="outline">{noiseAmount}</Badge>
+                        </div> */}
+                        <OptimizedSlider
+                            label="Noise Amount"
+                            value={noiseAmount}
+                            onChange={setNoiseAmount}
+                            min={0}
+                            max={100}
+                            step={1}
+                            className="py-2"
+                        />
                     </Panel>
+
+
+                    <Panel title="Image Border Radius">
+                        <OptimizedSlider
+                            label="Border Radius"
+                            value={imageRadius}
+                            onChange={setImageRadius}
+                            min={0}
+                            max={100}
+                            step={1}
+                            formatValue={(val) => val.toFixed(0)}
+                            unit="px"
+                        />
+                    </Panel>
+
+                    <Panel title="Drop Shaddow">
+                        <OptimizedSlider
+                            label="Shadow Spread"
+                            value={shadowSpread}
+                            onChange={setShadowSpread}
+                            min={0}
+                            max={100}
+                            step={1}
+                            unit="px"
+                        />
+                    </Panel>
+
+                    <Panel title="Image Rotation">
+                        <OptimizedSlider
+                            label="Rotation"
+                            value={imageRotation}
+                            onChange={setImageRotation}
+                            min={-180}
+                            max={180}
+                            step={1}
+                            unit="°"
+                        />
+                    </Panel>
+
+                    <Panel title="Blur">
+                        <OptimizedSlider
+                            label="Amount"
+                            value={blur}
+                            onChange={setBlur}
+                            min={0}
+                            max={10}
+                            step={0.5}
+                            unit="px"
+                        />
+                    </Panel>
+
+                    <Panel title="Brightness">
+                        <OptimizedSlider
+                            label="Brightness"
+                            value={brightness}
+                            onChange={setBrightness}
+                            min={0}
+                            max={200}
+                            step={1}
+                            unit="%"
+                        />
+                    </Panel>
+
+                    <Panel title="Contrast">
+                        <OptimizedSlider
+                            label="Contrast"
+                            value={contrast}
+                            onChange={setContrast}
+                            min={0}
+                            max={200}
+                            step={1}
+                            unit="%"
+                        />
+                    </Panel>
+
+                    <Panel title="Saturation">
+                        <OptimizedSlider
+                            label="Saturation"
+                            value={saturate}
+                            onChange={setSaturate}
+                            min={0}
+                            max={200}
+                            step={1}
+                            unit="%"
+                        />
+                    </Panel>
+
+                    <Panel title="Hue Shift">
+                        <OptimizedSlider
+                            label="Angle"
+                            value={hueRotate}
+                            onChange={setHueRotate}
+                            min={-180}
+                            max={180}
+                            step={1}
+                            unit="°"
+                        />
+                    </Panel>
+
                 </TabsContent>
             </Tabs>
 

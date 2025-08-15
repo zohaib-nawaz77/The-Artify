@@ -29,8 +29,13 @@ const Canvas = ({
     opacity,
     noiseAmount,
     shadowSpread,
-imageRotation,
+    imageRotation,
     imageScale,
+    blur = 0,
+    brightness = 100,
+    contrast = 100,
+    saturate = 100,
+    hueRotate = 0,
     handleFileInput,
     handleScreenshot
 }) => {
@@ -187,33 +192,33 @@ imageRotation,
 
     // Render raycast wallpaper when it changes
     useEffect(() => {
-  if (!selectedRaycastWallpaper || selectedRaycastWallpaper === 'none') {
-    raycastImageRef.current = null;
-    renderBackgroundLayer();
-    compositeAllLayers();
-    return;
-  }
-  const ray = raycastWallpapers.find(r => r.id === selectedRaycastWallpaper);
-  if (!ray?.src) return;
-  preloadImage(ray.src)
-    .then(img => { raycastImageRef.current = img; })
-    .finally(() => { renderBackgroundLayer(); compositeAllLayers(); });
-}, [selectedRaycastWallpaper]);
+        if (!selectedRaycastWallpaper || selectedRaycastWallpaper === 'none') {
+            raycastImageRef.current = null;
+            renderBackgroundLayer();
+            compositeAllLayers();
+            return;
+        }
+        const ray = raycastWallpapers.find(r => r.id === selectedRaycastWallpaper);
+        if (!ray?.src) return;
+        preloadImage(ray.src)
+            .then(img => { raycastImageRef.current = img; })
+            .finally(() => { renderBackgroundLayer(); compositeAllLayers(); });
+    }, [selectedRaycastWallpaper]);
 
     // Render overlay when it changes
- useEffect(() => {
-  if (!selectedOverlay || selectedOverlay === 'none') {
-    overlayImageRef.current = null;
-    clearLayer(overlayLayerRef.current);
-    compositeAllLayers();
-    return;
-  }
-  const overlay = overlays.find(o => o.id === selectedOverlay);
-  if (!overlay?.src) return;
-  preloadImage(overlay.src)
-    .then(img => { overlayImageRef.current = img; })
-    .finally(() => { renderOverlayLayer(); compositeAllLayers(); });
-}, [selectedOverlay]);
+    useEffect(() => {
+        if (!selectedOverlay || selectedOverlay === 'none') {
+            overlayImageRef.current = null;
+            clearLayer(overlayLayerRef.current);
+            compositeAllLayers();
+            return;
+        }
+        const overlay = overlays.find(o => o.id === selectedOverlay);
+        if (!overlay?.src) return;
+        preloadImage(overlay.src)
+            .then(img => { overlayImageRef.current = img; })
+            .finally(() => { renderOverlayLayer(); compositeAllLayers(); });
+    }, [selectedOverlay]);
 
 
     // Render image layer when scale or radius changes
@@ -244,98 +249,98 @@ imageRotation,
     };
 
     // Parse gradient string to extract type, parameters, and color stops
-   const parseGradient = (gradientStr, width, height, dpr) => {
-  const linearMatch = gradientStr.match(/linear-gradient\(([^)]+)\)/);
-  const radialMatch = gradientStr.match(/radial-gradient\(([^)]+)\)/);
+    const parseGradient = (gradientStr, width, height, dpr) => {
+        const linearMatch = gradientStr.match(/linear-gradient\(([^)]+)\)/);
+        const radialMatch = gradientStr.match(/radial-gradient\(([^)]+)\)/);
 
-  // physical pixels
-  const physW = width * dpr;
-  const physH = height * dpr;
+        // physical pixels
+        const physW = width * dpr;
+        const physH = height * dpr;
 
-  const ctx = bgLayerRef.current.getContext('2d');
+        const ctx = bgLayerRef.current.getContext('2d');
 
-  if (linearMatch) {
-    const params = linearMatch[1].split(',').map(s => s.trim());
-    let angle = '0deg';
-    let colors = params;
+        if (linearMatch) {
+            const params = linearMatch[1].split(',').map(s => s.trim());
+            let angle = '0deg';
+            let colors = params;
 
-    if (params[0].startsWith('to ') || /^\d+deg/.test(params[0])) {
-      angle = params.shift();
-    }
+            if (params[0].startsWith('to ') || /^\d+deg/.test(params[0])) {
+                angle = params.shift();
+            }
 
-    const colorStops = colors.map(c => {
-      const [col, stop] = c.trim().split(' ');
-      return { color: col, stop: stop ? parseFloat(stop) / 100 : null };
-    });
+            const colorStops = colors.map(c => {
+                const [col, stop] = c.trim().split(' ');
+                return { color: col, stop: stop ? parseFloat(stop) / 100 : null };
+            });
 
-    let g;
-    if (angle.startsWith('to ')) {
-      const dir = angle.replace('to ', '');
-      switch (dir) {
-        case 'bottom':
-          g = ctx.createLinearGradient(0, 0, 0, physH);
-          break;
-        case 'right':
-          g = ctx.createLinearGradient(0, 0, physW, 0);
-          break;
-        case 'top':
-          g = ctx.createLinearGradient(0, physH, 0, 0);
-          break;
-        case 'left':
-          g = ctx.createLinearGradient(physW, 0, 0, 0);
-          break;
-        default:
-          g = ctx.createLinearGradient(0, 0, physW, 0);
-      }
-    } else {
-      const rad = parseFloat(angle) * Math.PI / 180;
-      const dx = Math.cos(rad) * physW;
-      const dy = Math.sin(rad) * physH;
-      g = ctx.createLinearGradient(
-        physW / 2 - dx / 2,
-        physH / 2 - dy / 2,
-        physW / 2 + dx / 2,
-        physH / 2 + dy / 2
-      );
-    }
+            let g;
+            if (angle.startsWith('to ')) {
+                const dir = angle.replace('to ', '');
+                switch (dir) {
+                    case 'bottom':
+                        g = ctx.createLinearGradient(0, 0, 0, physH);
+                        break;
+                    case 'right':
+                        g = ctx.createLinearGradient(0, 0, physW, 0);
+                        break;
+                    case 'top':
+                        g = ctx.createLinearGradient(0, physH, 0, 0);
+                        break;
+                    case 'left':
+                        g = ctx.createLinearGradient(physW, 0, 0, 0);
+                        break;
+                    default:
+                        g = ctx.createLinearGradient(0, 0, physW, 0);
+                }
+            } else {
+                const rad = parseFloat(angle) * Math.PI / 180;
+                const dx = Math.cos(rad) * physW;
+                const dy = Math.sin(rad) * physH;
+                g = ctx.createLinearGradient(
+                    physW / 2 - dx / 2,
+                    physH / 2 - dy / 2,
+                    physW / 2 + dx / 2,
+                    physH / 2 + dy / 2
+                );
+            }
 
-    colorStops.forEach(({ color, stop }, i) =>
-      g.addColorStop(stop ?? i / (colorStops.length - 1), color)
-    );
-    return g;
-  }
+            colorStops.forEach(({ color, stop }, i) =>
+                g.addColorStop(stop ?? i / (colorStops.length - 1), color)
+            );
+            return g;
+        }
 
-  if (radialMatch) {
-    const params = radialMatch[1].split(',').map(s => s.trim());
-    const shapePos = params[0];
-    const colors = params.slice(1);
+        if (radialMatch) {
+            const params = radialMatch[1].split(',').map(s => s.trim());
+            const shapePos = params[0];
+            const colors = params.slice(1);
 
-    const m = shapePos.match(/(circle|ellipse)\s+at\s+(\d+%)\s+(\d+%)/);
-    const cx = m ? (parseFloat(m[2]) / 100) * physW : physW / 2;
-    const cy = m ? (parseFloat(m[3]) / 100) * physH : physH / 2;
+            const m = shapePos.match(/(circle|ellipse)\s+at\s+(\d+%)\s+(\d+%)/);
+            const cx = m ? (parseFloat(m[2]) / 100) * physW : physW / 2;
+            const cy = m ? (parseFloat(m[3]) / 100) * physH : physH / 2;
 
-    const g = ctx.createRadialGradient(
-      cx,
-      cy,
-      0,
-      cx,
-      cy,
-      Math.max(physW, physH) / 2
-    );
+            const g = ctx.createRadialGradient(
+                cx,
+                cy,
+                0,
+                cx,
+                cy,
+                Math.max(physW, physH) / 2
+            );
 
-    const colorStops = colors.map(c => {
-      const [col, stop] = c.trim().split(' ');
-      return { color: col, stop: stop ? parseFloat(stop) / 100 : null };
-    });
+            const colorStops = colors.map(c => {
+                const [col, stop] = c.trim().split(' ');
+                return { color: col, stop: stop ? parseFloat(stop) / 100 : null };
+            });
 
-    colorStops.forEach(({ color, stop }, i) =>
-      g.addColorStop(stop ?? i / (colorStops.length - 1), color)
-    );
-    return g;
-  }
+            colorStops.forEach(({ color, stop }, i) =>
+                g.addColorStop(stop ?? i / (colorStops.length - 1), color)
+            );
+            return g;
+        }
 
-  return null;
-};
+        return null;
+    };
 
     // Render background layer (gradient, magic gradient, mesh, or solid color)
     const renderBackgroundLayer = () => {
@@ -398,92 +403,92 @@ imageRotation,
     };
 
     // Render image layer with shadow effect
-  const renderImageLayer = () => {
-  if (!imgLayerRef.current || !imageObjectRef.current || canvasDimensions.width === 0) return;
+    const renderImageLayer = () => {
+        if (!imgLayerRef.current || !imageObjectRef.current || canvasDimensions.width === 0) return;
 
-  const ctx = imgLayerRef.current.getContext('2d');
-  const { width, height, dpr } = canvasDimensions;
+        const ctx = imgLayerRef.current.getContext('2d');
+        const { width, height, dpr } = canvasDimensions;
 
-  // Clear previous content
-  ctx.clearRect(0, 0, imgLayerRef.current.width, imgLayerRef.current.height);
+        // Clear previous content
+        ctx.clearRect(0, 0, imgLayerRef.current.width, imgLayerRef.current.height);
 
-  // Save context and scale for DPR
-  ctx.save();
-  ctx.scale(dpr, dpr);
+        // Save context and scale for DPR
+        ctx.save();
+        ctx.scale(dpr, dpr);
 
-  ctx.imageSmoothingEnabled = true;
-  ctx.imageSmoothingQuality = 'high';
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
 
-  const img = imageObjectRef.current;
-  const maxImageScale = 0.8;
+        const img = imageObjectRef.current;
+        const maxImageScale = 0.8;
 
-  // Calculate image size
-  const scale = Math.min(width / img.width, height / img.height) * (imageScale || 1) * maxImageScale;
-  const imgWidth = img.width * scale;
-  const imgHeight = img.height * scale;
+        // Calculate image size
+        const scale = Math.min(width / img.width, height / img.height) * (imageScale || 1) * maxImageScale;
+        const imgWidth = img.width * scale;
+        const imgHeight = img.height * scale;
 
-  // Center position
-  const cx = width / 2;
-  const cy = height / 2;
+        // Center position
+        const cx = width / 2;
+        const cy = height / 2;
 
-  // Save again for shadow + rotation
-  ctx.save();
+        // Save again for shadow + rotation
+        ctx.save();
 
-  // Move origin to center for rotation
-  ctx.translate(cx, cy);
-  ctx.rotate(imageRotation * Math.PI / 180);
-  ctx.translate(-imgWidth / 2, -imgHeight / 2);
+        // Move origin to center for rotation
+        ctx.translate(cx, cy);
+        ctx.rotate(imageRotation * Math.PI / 180);
+        ctx.translate(-imgWidth / 2, -imgHeight / 2);
 
-  // Apply shadow
-  ctx.shadowColor = `rgba(0, 0, 0, ${shadowIntensity})`;
-  ctx.shadowBlur = shadowSpread * dpr;
-  ctx.shadowOffsetX = 30;
-  ctx.shadowOffsetY = 35;
+        // Apply shadow
+        ctx.shadowColor = `rgba(0, 0, 0, ${shadowIntensity})`;
+        ctx.shadowBlur = shadowSpread * dpr;
+        ctx.shadowOffsetX = 30;
+        ctx.shadowOffsetY = 35;
 
-  // Optional rounded-rect path for clipping & shadow
-  const drawPath = () => {
-    ctx.beginPath();
-    if (imageRadius > 0) {
-      const radius = imageRadius * scale;
-      ctx.moveTo(radius, 0);
-      ctx.arcTo(imgWidth, 0, imgWidth, imgHeight, radius);
-      ctx.arcTo(imgWidth, imgHeight, 0, imgHeight, radius);
-      ctx.arcTo(0, imgHeight, 0, 0, radius);
-      ctx.arcTo(0, 0, imgWidth, 0, radius);
-      ctx.closePath();
-    } else {
-      ctx.rect(0, 0, imgWidth, imgHeight);
-    }
-  };
+        // Optional rounded-rect path for clipping & shadow
+        const drawPath = () => {
+            ctx.beginPath();
+            if (imageRadius > 0) {
+                const radius = imageRadius * scale;
+                ctx.moveTo(radius, 0);
+                ctx.arcTo(imgWidth, 0, imgWidth, imgHeight, radius);
+                ctx.arcTo(imgWidth, imgHeight, 0, imgHeight, radius);
+                ctx.arcTo(0, imgHeight, 0, 0, radius);
+                ctx.arcTo(0, 0, imgWidth, 0, radius);
+                ctx.closePath();
+            } else {
+                ctx.rect(0, 0, imgWidth, imgHeight);
+            }
+        };
 
-  // Draw shadow shape
-  drawPath();
-  ctx.fillStyle = 'rgba(0,0,0,0.9)';
-  ctx.fill();
+        // Draw shadow shape
+        drawPath();
+        ctx.fillStyle = 'rgba(0,0,0,0.9)';
+        ctx.fill();
 
-  // Reset shadow for actual image
-  ctx.shadowColor = 'transparent';
-  ctx.shadowBlur = 0;
-  ctx.shadowOffsetX = 0;
-  ctx.shadowOffsetY = 0;
+        // Reset shadow for actual image
+        ctx.shadowColor = 'transparent';
+        ctx.shadowBlur = 0;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
 
-  // Clip and draw image
-  if (imageRadius > 0) {
-    drawPath();
-    ctx.clip();
-  }
-  ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, imgWidth, imgHeight);
+        // Clip and draw image
+        if (imageRadius > 0) {
+            drawPath();
+            ctx.clip();
+        }
+        ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, imgWidth, imgHeight);
 
-  // Subtle border
-  ctx.strokeStyle = 'rgba(0,0,0,0.08)';
-  ctx.lineWidth = 1;
-  drawPath();
-  ctx.stroke();
+        // Subtle border
+        ctx.strokeStyle = 'rgba(0,0,0,0.08)';
+        ctx.lineWidth = 1;
+        drawPath();
+        ctx.stroke();
 
-  // Restore transformations
-  ctx.restore();
-  ctx.restore();
-};
+        // Restore transformations
+        ctx.restore();
+        ctx.restore();
+    };
     // Render overlay layer
     const renderOverlayLayer = () => {
         if (!overlayLayerRef.current || canvasDimensions.width === 0) return;
@@ -589,6 +594,15 @@ imageRotation,
                 id="canvas"
                 ref={canvasRef}
                 className="w-full h-full rounded-lg border border-border shadow-lg overflow-hidden"
+                style={{
+                    filter: `
+     blur(${blur}px)
+     brightness(${brightness}%)
+     contrast(${contrast}%)
+     saturate(${saturate}%)
+     hue-rotate(${hueRotate}deg)
+   `
+                }}
             />
             {!uploadedImage && (
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">

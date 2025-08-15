@@ -18,6 +18,12 @@ const App = () => {
   const [imageRadius, setImageRadius] = useState(8);
   const [shadowSpread, setShadowSpread] = useState(20);
   const [imageRotation, setImageRotation] = useState(0);
+  // after the existing useState hooks
+  const [blur, setBlur] = useState(0);
+  const [brightness, setBrightness] = useState(100);
+  const [contrast, setContrast] = useState(100);
+  const [saturate, setSaturate] = useState(100);
+  const [hueRotate, setHueRotate] = useState(0);
   const [theme, setTheme] = useState('light');
   const [activeTab, setActiveTab] = useState('bg'); // Track active tab
 
@@ -128,6 +134,11 @@ const App = () => {
         opacity={opacity}
         noiseAmount={noiseAmount}
         imageScale={imageScale}
+        blur={blur}
+        brightness={brightness}
+        contrast={contrast}
+        saturate={saturate}
+        hueRotate={hueRotate}
         handleFileInput={handleFileInput}
         handleScreenshot={handleScreenshot}
       />
@@ -159,6 +170,11 @@ const App = () => {
         uploadedImage={uploadedImage}
         setUploadedImage={setUploadedImage}
         imageScale={imageScale}
+        blur={blur} setBlur={setBlur}
+        brightness={brightness} setBrightness={setBrightness}
+        contrast={contrast} setContrast={setContrast}
+        saturate={saturate} setSaturate={setSaturate}
+        hueRotate={hueRotate} setHueRotate={setHueRotate}
         setImageScale={setImageScale}
         theme={theme}
         activeTab={activeTab}
