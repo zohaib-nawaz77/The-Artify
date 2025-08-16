@@ -4,30 +4,30 @@ import ControlPanel from './layout/ControlPanel';
 import { toast } from "sonner";
 
 const App = () => {
-  // State for the app
-  const [opacity, setOpacity] = useState(0.4);
-  const [noiseAmount, setNoiseAmount] = useState(0);
+  // THEME STATE
+  const [theme, setTheme] = useState('light');
+  const [activeTab, setActiveTab] = useState('bg');
+  // BACKGROUND SETTINGS
+  const [backgroundColor, setBackgroundColor] = useState('#ffffff');
   const [selectedGradient, setSelectedGradient] = useState('gradient-1');
   const [selectedMagicGradient, setSelectedMagicGradient] = useState('none');
   const [selectedMeshGradient, setSelectedMeshGradient] = useState(null);
   const [selectedRaycastWallpaper, setSelectedRaycastWallpaper] = useState(null);
   const [selectedOverlay, setSelectedOverlay] = useState(null);
-  const [backgroundColor, setBackgroundColor] = useState('#ffffff');
+  const [opacity, setOpacity] = useState(0.4);
+  const [noiseAmount, setNoiseAmount] = useState(0);
+  //  IMAGE SETTINGS 
   const [uploadedImage, setUploadedImage] = useState(null);
   const [imageScale, setImageScale] = useState(1);
   const [imageRadius, setImageRadius] = useState(8);
   const [shadowSpread, setShadowSpread] = useState(20);
   const [imageRotation, setImageRotation] = useState(0);
-  // after the existing useState hooks
+  // ====== IMAGE FILTERS ======
   const [blur, setBlur] = useState(0);
   const [brightness, setBrightness] = useState(100);
   const [contrast, setContrast] = useState(100);
   const [saturate, setSaturate] = useState(100);
   const [hueRotate, setHueRotate] = useState(0);
-  const [theme, setTheme] = useState('light');
-  const [activeTab, setActiveTab] = useState('bg'); // Track active tab
-
-
 
   // get/set theme from/in localStorage
   useEffect(() => {
@@ -92,7 +92,7 @@ const App = () => {
 
   // Handle save
   const handleSave = () => {
-    const saveData = {
+    const designData = {
       selectedGradient,
       backgroundColor,
       selectedOverlay,
@@ -107,7 +107,7 @@ const App = () => {
     };
     try {
       const savedDesigns = JSON.parse(localStorage.getItem('gradientDesigns') || '[]');
-      savedDesigns.push(saveData);
+      savedDesigns.push(designData);
       localStorage.setItem('gradientDesigns', JSON.stringify(savedDesigns));
       toast.success('Design saved in LocalStorage!');
     } catch (err) {
@@ -120,41 +120,35 @@ const App = () => {
     <div className="md:flex md:flex-row flex-col h-screen bg-background text-foreground">
       {/* Main canvas area */}
       <Canvas
+        // Background settings
         selectedMagicGradient={selectedMagicGradient}
         selectedGradient={selectedGradient}
         selectedOverlay={selectedOverlay}
         selectedMeshGradient={selectedMeshGradient}
         selectedRaycastWallpaper={selectedRaycastWallpaper}
         backgroundColor={backgroundColor}
-        uploadedImage={uploadedImage}
-        imageRadius={imageRadius}
-        setImageRadius={setImageRadius}
-        shadowSpread={shadowSpread}
-        imageRotation={imageRotation}
         opacity={opacity}
         noiseAmount={noiseAmount}
+        // Image settings
+        uploadedImage={uploadedImage}
+        imageRadius={imageRadius}
+        shadowSpread={shadowSpread}
+        imageRotation={imageRotation}
         imageScale={imageScale}
+        // Image filters
         blur={blur}
         brightness={brightness}
         contrast={contrast}
         saturate={saturate}
         hueRotate={hueRotate}
+        // Handlers
         handleFileInput={handleFileInput}
         handleScreenshot={handleScreenshot}
       />
 
       {/* Sidebar controls */}
       <ControlPanel
-        shadowSpread={shadowSpread}
-        setShadowSpread={setShadowSpread}
-        imageRotation={imageRotation}
-        setImageRotation={setImageRotation}
-        imageRadius={imageRadius}
-        setImageRadius={setImageRadius}
-        opacity={opacity}
-        setOpacity={setOpacity}
-        noiseAmount={noiseAmount}
-        setNoiseAmount={setNoiseAmount}
+        // Background settings
         selectedGradient={selectedGradient}
         setSelectedGradient={setSelectedGradient}
         selectedMagicGradient={selectedMagicGradient}
@@ -167,18 +161,37 @@ const App = () => {
         setSelectedRaycastWallpaper={setSelectedRaycastWallpaper}
         backgroundColor={backgroundColor}
         setBackgroundColor={setBackgroundColor}
+        opacity={opacity}
+        setOpacity={setOpacity}
+        noiseAmount={noiseAmount}
+        setNoiseAmount={setNoiseAmount}
+        // Image settings
         uploadedImage={uploadedImage}
         setUploadedImage={setUploadedImage}
         imageScale={imageScale}
-        blur={blur} setBlur={setBlur}
-        brightness={brightness} setBrightness={setBrightness}
-        contrast={contrast} setContrast={setContrast}
-        saturate={saturate} setSaturate={setSaturate}
-        hueRotate={hueRotate} setHueRotate={setHueRotate}
         setImageScale={setImageScale}
+        imageRadius={imageRadius}
+        setImageRadius={setImageRadius}
+        shadowSpread={shadowSpread}
+        setShadowSpread={setShadowSpread}
+        imageRotation={imageRotation}
+        setImageRotation={setImageRotation}
+        // Image filters
+        blur={blur}
+        setBlur={setBlur}
+        brightness={brightness}
+        setBrightness={setBrightness}
+        contrast={contrast}
+        setContrast={setContrast}
+        saturate={saturate}
+        setSaturate={setSaturate}
+        hueRotate={hueRotate}
+        setHueRotate={setHueRotate}
+        // UI state
         theme={theme}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
+        // Actions
         handleSave={handleSave}
         handleDownload={handleDownload}
         toggleTheme={toggleTheme}

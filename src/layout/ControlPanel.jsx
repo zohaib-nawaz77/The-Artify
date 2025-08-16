@@ -1,14 +1,9 @@
 import React from 'react';
 import { Download, Save, Crop, Moon, Sun, Layout, Palette, Sparkles } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-// Import the optimized slider component
 import OptimizedSlider from '../partials/OptimizedSlider';
 import { gradients, magicGradients, overlays, meshGradients, solidColors, raycastWallpapers } from '../../data/data';
-
-
 import {
     Tooltip,
     TooltipContent,
@@ -20,54 +15,42 @@ import { motion } from "motion/react"
 import { toast } from 'sonner';
 
 const ControlPanel = ({
-    imageRadius,
-    setImageRadius,
-    opacity,
-    setOpacity,
-    noiseAmount,
-    setNoiseAmount,
-    selectedGradient,
-    setSelectedGradient,
-    selectedMagicGradient,
-    setSelectedMagicGradient,
-    selectedOverlay,
-    setSelectedOverlay,
-    shadowSpread,
-    setShadowSpread,
-    imageRotation,
-    setImageRotation,
-    selectedMeshGradient,
-    setSelectedMeshGradient,
-    selectedRaycastWallpaper,
-    setSelectedRaycastWallpaper,
-    backgroundColor,
-    setBackgroundColor,
-    uploadedImage,
-    setUploadedImage,
-    imageScale,
-    setImageScale,
+    // Image properties
+    imageRadius, setImageRadius,
+    shadowSpread, setShadowSpread,
+    imageRotation, setImageRotation,
+    imageScale, setImageScale,
+    // Background properties
+    opacity, setOpacity,
+    noiseAmount, setNoiseAmount,
+    selectedGradient, setSelectedGradient,
+    selectedMagicGradient, setSelectedMagicGradient,
+    selectedOverlay, setSelectedOverlay,
+    selectedMeshGradient, setSelectedMeshGradient,
+    selectedRaycastWallpaper, setSelectedRaycastWallpaper,
+    backgroundColor, setBackgroundColor,
+    // Image filters
     blur, setBlur,
     brightness, setBrightness,
     contrast, setContrast,
     saturate, setSaturate,
     hueRotate, setHueRotate,
+    // UI state
+    uploadedImage, setUploadedImage,
     theme,
-    activeTab,
-    setActiveTab,
+    activeTab, setActiveTab,
+    // Actions
     handleSave,
     handleDownload,
     toggleTheme
 }) => {
-
-
-
-
-    // Animation variants for tab text
+    // Animation for tab text transitions
     const textVariants = {
         hidden: { opacity: 0, x: -4 },
         visible: { opacity: 1, x: 0, transition: { duration: 0.2, ease: 'easeOut' } },
     };
 
+    // Reusable panel component for consistent styling
     const Panel = React.memo(({ title, children }) => (
         <div className="mb-6">
             <h3 className="text-xs uppercase font-medium text-muted-foreground mb-3">{title}</h3>
@@ -75,9 +58,17 @@ const ControlPanel = ({
         </div>
     ));
 
+    // Handle removing uploaded image
+    const handleRemoveImage = () => {
+        setUploadedImage(null);
+        toast.success('Image removed from canvas.');
+    };
+
     return (
         <div className="md:w-76 w-full border-l border-border bg-muted/40 p-4 overflow-y-auto">
+            {/* Top action bar */}
             <div className="flex justify-between mb-6">
+                {/* Left actions: Save and Crop */}
                 <div className="flex gap-2">
                     <TooltipProvider>
                         <Tooltip>
@@ -91,7 +82,7 @@ const ControlPanel = ({
                             </TooltipContent>
                         </Tooltip>
                     </TooltipProvider>
-
+                    
                     <TooltipProvider>
                         <Tooltip>
                             <TooltipTrigger asChild>
@@ -105,6 +96,8 @@ const ControlPanel = ({
                         </Tooltip>
                     </TooltipProvider>
                 </div>
+                
+                {/* Right actions: Download and Theme Toggle */}
                 <div className="flex gap-2">
                     <TooltipProvider>
                         <Tooltip>
@@ -118,7 +111,7 @@ const ControlPanel = ({
                             </TooltipContent>
                         </Tooltip>
                     </TooltipProvider>
-
+                    
                     <TooltipProvider>
                         <Tooltip>
                             <TooltipTrigger asChild>
@@ -142,14 +135,19 @@ const ControlPanel = ({
                     </TooltipProvider>
                 </div>
             </div>
-
+            
+            {/* Main tabs for different control sections */}
             <Tabs defaultValue="bg" onValueChange={setActiveTab} className="mb-6">
                 <TabsList className="grid grid-cols-3 w-full h-10 py-1">
+                    {/* Layers Tab */}
                     <TabsTrigger value="layers" className="flex items-center justify-center">
                         {activeTab === "layers" ? (
-                            <motion.span variants={textVariants}
+                            <motion.span 
+                                variants={textVariants}
                                 initial="hidden"
-                                animate="visible" className="flex items-center gap-1 text-xs">
+                                animate="visible" 
+                                className="flex items-center gap-1 text-xs"
+                            >
                                 <Layout className="h-4 w-4" />
                                 Layers
                             </motion.span>
@@ -157,11 +155,16 @@ const ControlPanel = ({
                             <Layout className="h-4 w-4" />
                         )}
                     </TabsTrigger>
+                    
+                    {/* Background Tab */}
                     <TabsTrigger value="bg" className="flex items-center justify-center">
                         {activeTab === "bg" ? (
-                            <motion.span variants={textVariants}
+                            <motion.span 
+                                variants={textVariants}
                                 initial="hidden"
-                                animate="visible" className="flex items-center gap-1 text-xs">
+                                animate="visible" 
+                                className="flex items-center gap-1 text-xs"
+                            >
                                 <Palette className="h-4 w-4" />
                                 BG
                             </motion.span>
@@ -169,11 +172,16 @@ const ControlPanel = ({
                             <Palette className="h-4 w-4" />
                         )}
                     </TabsTrigger>
+                    
+                    {/* Effects Tab */}
                     <TabsTrigger value="effects" className="flex items-center justify-center">
                         {activeTab === "effects" ? (
-                            <motion.span variants={textVariants}
+                            <motion.span 
+                                variants={textVariants}
                                 initial="hidden"
-                                animate="visible" className="flex items-center gap-1 text-xs">
+                                animate="visible" 
+                                className="flex items-center gap-1 text-xs"
+                            >
                                 <Sparkles className="h-4 w-4" />
                                 Effects
                             </motion.span>
@@ -182,31 +190,32 @@ const ControlPanel = ({
                         )}
                     </TabsTrigger>
                 </TabsList>
-
+                
+                {/* Layers Tab Content */}
                 <TabsContent value="layers" className="pt-4">
                     <Panel title="Overlays">
                         <div className="grid grid-cols-4 gap-2">
                             {overlays.map(overlay => (
                                 <motion.div
                                     key={overlay.id}
-                                    className={`h-10 w-full rounded-md cursor-pointer bg-gray-300 dark:bg-zinc-700 ${selectedOverlay === overlay.id
-                                        ? 'border-1 border-primary dark:border-zinc-500'
-                                        : 'border border-transparent'
-                                        }`}
+                                    className={`h-10 w-full rounded-md cursor-pointer bg-gray-300 dark:bg-zinc-700 ${
+                                        selectedOverlay === overlay.id
+                                            ? 'border-1 border-primary dark:border-zinc-500'
+                                            : 'border border-transparent'
+                                    }`}
                                     whileHover={{ scale: 1.05 }}
                                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                                    onClick={() => {
-                                        setSelectedOverlay(prev => prev === overlay.id ? null : overlay.id);
-                                    }}
+                                    onClick={() => setSelectedOverlay(
+                                        prev => prev === overlay.id ? null : overlay.id
+                                    )}
                                 >
-                                    {overlay.src && (
+                                    {overlay.src ? (
                                         <img
                                             src={overlay.src}
                                             alt={overlay.name}
                                             className="w-full h-full object-cover rounded-md"
                                         />
-                                    )}
-                                    {!overlay.src && (
+                                    ) : (
                                         <div className="w-full h-full flex items-center justify-center text-xs text-muted-foreground">
                                             None
                                         </div>
@@ -215,7 +224,7 @@ const ControlPanel = ({
                             ))}
                         </div>
                     </Panel>
-
+                    
                     <Panel title="Opacity">
                         <OptimizedSlider
                             label="Overlay Opacity"
@@ -226,58 +235,54 @@ const ControlPanel = ({
                             step={0.1}
                         />
                     </Panel>
-
+                    
                     {uploadedImage && (
-                        <>
-                            <Panel title="Image Size">
-                                <OptimizedSlider
-                                    label="Image Scale"
-                                    value={imageScale}
-                                    onChange={setImageScale}
-                                    min={0.1}
-                                    max={2}
-                                    step={0.05}
-                                    formatValue={(val) => val.toFixed(2)}
-                                    unit="x"
-                                />
-
-                            </Panel>
-
-                        </>
+                        <Panel title="Image Size">
+                            <OptimizedSlider
+                                label="Image Scale"
+                                value={imageScale}
+                                onChange={setImageScale}
+                                min={0.1}
+                                max={2}
+                                step={0.05}
+                                formatValue={(val) => val.toFixed(2)}
+                                unit="x"
+                            />
+                        </Panel>
                     )}
-
-
                 </TabsContent>
-
+                
+                {/* Background Tab Content */}
                 <TabsContent value="bg" className="pt-4">
-
                     <Panel title="Raycast Wallpapers">
                         <div className="grid grid-cols-4 gap-2">
                             {raycastWallpapers.map(raycast => (
                                 <motion.div
                                     key={raycast.id}
-                                    className={`h-10 w-full rounded-md cursor-pointer bg-gray-300 dark:bg-zinc-700 ${selectedRaycastWallpaper === raycast.id
-                                        ? 'border-1 border-primary dark:border-zinc-500'
-                                        : 'border border-transparent'
-                                        }`}
+                                    className={`h-10 w-full rounded-md cursor-pointer bg-gray-300 dark:bg-zinc-700 ${
+                                        selectedRaycastWallpaper === raycast.id
+                                            ? 'border-1 border-primary dark:border-zinc-500'
+                                            : 'border border-transparent'
+                                    }`}
                                     whileHover={{ scale: 1.05 }}
                                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                                     onClick={() => {
-                                        setSelectedRaycastWallpaper(prev => prev === raycast.id ? null : raycast.id);
+                                        setSelectedRaycastWallpaper(
+                                            prev => prev === raycast.id ? null : raycast.id
+                                        );
                                         setSelectedGradient(null);
                                         setSelectedMeshGradient(null);
                                         setSelectedMagicGradient(null);
                                         setBackgroundColor('#ffffff');
                                     }}
                                 >
-                                    {raycast.src && (
+                                    {raycast.src ? (
                                         <img
                                             src={raycast.src}
                                             alt={raycast.name}
                                             className="w-full h-full object-cover rounded-md"
                                         />
-                                    )}
-                                    {!raycast.src && (
+                                    ) : (
                                         <div className="w-full h-full flex items-center justify-center text-xs text-muted-foreground">
                                             None
                                         </div>
@@ -287,40 +292,43 @@ const ControlPanel = ({
                         </div>
                     </Panel>
 
-
-                    <Panel title="Gradients" className="">
-                        <div className="grid grid-cols-7 gap-2 ">
+                    <Panel title="Gradients">
+                        <div className="grid grid-cols-7 gap-2">
                             {Object.keys(gradients).map(gradientKey => (
                                 <motion.div
                                     key={gradientKey}
-                                    className={`h-8 w-full rounded-md cursor-pointer ${selectedGradient === gradientKey
-                                        ? 'ring-1 ring-primary ring-offset-1'
-                                        : ''
-                                        }`}
+                                    className={`h-8 w-full rounded-md cursor-pointer ${
+                                        selectedGradient === gradientKey
+                                            ? 'ring-1 ring-primary ring-offset-1'
+                                            : ''
+                                    }`}
                                     whileHover={{ scale: 1.05 }}
                                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                                     style={{ background: gradients[gradientKey] }}
                                     onClick={() => {
-                                        setSelectedGradient(prev => prev === gradientKey ? null : gradientKey);
-                                        setSelectedMagicGradient(null); // Optional: still allow only one type of gradient active
-                                        setSelectedRaycastWallpaper(null); // Optional: still allow only one type of gradient active
-                                        setSelectedMeshGradient(null); // Optional: still allow only one type of gradient active
-                                        setBackgroundColor('#ffffff'); // Reset background color when gradient is selected
+                                        setSelectedGradient(
+                                            prev => prev === gradientKey ? null : gradientKey
+                                        );
+                                        setSelectedMagicGradient(null);
+                                        setSelectedRaycastWallpaper(null);
+                                        setSelectedMeshGradient(null);
+                                        setBackgroundColor('#ffffff');
                                     }}
                                 />
                             ))}
                         </div>
                     </Panel>
-
+                    
                     <Panel title="Solid Colors">
                         <div className="grid grid-cols-7 gap-2">
                             {solidColors.map(color => (
                                 <motion.div
                                     key={color}
-                                    className={`h-8 w-full rounded-md cursor-pointer ${backgroundColor === color && !selectedGradient && !selectedMeshGradient
-                                        ? 'border-2 border-primary dark:border-zinc-500'
-                                        : 'border border-transparent'
-                                        }`}
+                                    className={`h-8 w-full rounded-md cursor-pointer ${
+                                        backgroundColor === color && !selectedGradient && !selectedMeshGradient
+                                            ? 'border-2 border-primary dark:border-zinc-500'
+                                            : 'border border-transparent'
+                                    }`}
                                     whileHover={{ scale: 1.05 }}
                                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                                     style={{ background: color }}
@@ -334,34 +342,36 @@ const ControlPanel = ({
                             ))}
                         </div>
                     </Panel>
-
+                    
                     <Panel title="Mesh Gradients">
                         <div className="grid grid-cols-4 gap-2">
                             {meshGradients.map(mesh => (
                                 <motion.div
                                     key={mesh.id}
-                                    className={`h-10 w-full rounded-md cursor-pointer bg-gray-300 dark:bg-zinc-700 ${selectedMeshGradient === mesh.id
-                                        ? 'border-1 border-primary dark:border-zinc-500'
-                                        : 'border border-transparent'
-                                        }`}
+                                    className={`h-10 w-full rounded-md cursor-pointer bg-gray-300 dark:bg-zinc-700 ${
+                                        selectedMeshGradient === mesh.id
+                                            ? 'border-1 border-primary dark:border-zinc-500'
+                                            : 'border border-transparent'
+                                    }`}
                                     whileHover={{ scale: 1.05 }}
                                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                                     onClick={() => {
-                                        setSelectedMeshGradient(prev => prev === mesh.id ? null : mesh.id);
+                                        setSelectedMeshGradient(
+                                            prev => prev === mesh.id ? null : mesh.id
+                                        );
                                         setSelectedRaycastWallpaper(null);
                                         setSelectedMagicGradient(null);
                                         setSelectedGradient(null);
                                         setBackgroundColor('#ffffff');
                                     }}
                                 >
-                                    {mesh.src && (
+                                    {mesh.src ? (
                                         <img
                                             src={mesh.src}
                                             alt={mesh.name}
                                             className="w-full h-full object-cover rounded-md"
                                         />
-                                    )}
-                                    {!mesh.src && (
+                                    ) : (
                                         <div className="w-full h-full flex items-center justify-center text-xs text-muted-foreground">
                                             None
                                         </div>
@@ -371,23 +381,23 @@ const ControlPanel = ({
                         </div>
                     </Panel>
 
-
-
-
                     <Panel title="Magic Gradients">
                         <div className="grid grid-cols-4 gap-2">
                             {Object.keys(magicGradients).map(magicKey => (
                                 <motion.div
                                     key={magicKey}
-                                    className={`h-10 w-full rounded-md cursor-pointer ${selectedMagicGradient === magicKey
-                                        ? 'ring-1 ring-primary ring-offset-1'
-                                        : ''
-                                        }`}
+                                    className={`h-10 w-full rounded-md cursor-pointer ${
+                                        selectedMagicGradient === magicKey
+                                            ? 'ring-1 ring-primary ring-offset-1'
+                                            : ''
+                                    }`}
                                     whileHover={{ scale: 1.05 }}
                                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                                     style={{ background: magicGradients[magicKey] }}
                                     onClick={() => {
-                                        setSelectedMagicGradient(prev => prev === magicKey ? null : magicKey);
+                                        setSelectedMagicGradient(
+                                            prev => prev === magicKey ? null : magicKey
+                                        );
                                         setSelectedGradient(null);
                                         setSelectedMeshGradient(null);
                                         setSelectedRaycastWallpaper(null);
@@ -398,27 +408,10 @@ const ControlPanel = ({
                         </div>
                     </Panel>
                 </TabsContent>
-
+                
+                {/* Effects Tab Content */}
                 <TabsContent value="effects" className="pt-4">
-                    {/* <Panel title="Marble Textures">
-                        <div className="grid grid-cols-3 gap-2">
-                            {[1, 2, 3, 4, 5, 6].map(i => (
-                                <div
-                                    key={`marble-${i}`}
-                                    className="h-16 w-full rounded-md bg-muted cursor-pointer hover:bg-muted/70"
-                                    style={{ background: `url(/api/placeholder/50/50)` }}
-                                />
-                            ))}
-                        </div>
-                    </Panel> */}
-
-
-
                     <Panel title="Noise">
-                        {/* <div className="mb-1 flex justify-between items-center">
-                            <span className="text-xs text-muted-foreground">Noise Amount</span>
-                            <Badge variant="outline">{noiseAmount}</Badge>
-                        </div> */}
                         <OptimizedSlider
                             label="Noise Amount"
                             value={noiseAmount}
@@ -426,10 +419,8 @@ const ControlPanel = ({
                             min={0}
                             max={100}
                             step={1}
-                            className="py-2"
                         />
                     </Panel>
-
 
                     <Panel title="Image Border Radius">
                         <OptimizedSlider
@@ -443,8 +434,8 @@ const ControlPanel = ({
                             unit="px"
                         />
                     </Panel>
-
-                    <Panel title="Drop Shaddow">
+                    
+                    <Panel title="Drop Shadow">
                         <OptimizedSlider
                             label="Shadow Spread"
                             value={shadowSpread}
@@ -455,7 +446,7 @@ const ControlPanel = ({
                             unit="px"
                         />
                     </Panel>
-
+                    
                     <Panel title="Image Rotation">
                         <OptimizedSlider
                             label="Rotation"
@@ -467,7 +458,7 @@ const ControlPanel = ({
                             unit="°"
                         />
                     </Panel>
-
+                    
                     <Panel title="Blur">
                         <OptimizedSlider
                             label="Amount"
@@ -479,7 +470,7 @@ const ControlPanel = ({
                             unit="px"
                         />
                     </Panel>
-
+                    
                     <Panel title="Brightness">
                         <OptimizedSlider
                             label="Brightness"
@@ -491,7 +482,7 @@ const ControlPanel = ({
                             unit="%"
                         />
                     </Panel>
-
+                    
                     <Panel title="Contrast">
                         <OptimizedSlider
                             label="Contrast"
@@ -503,7 +494,7 @@ const ControlPanel = ({
                             unit="%"
                         />
                     </Panel>
-
+                    
                     <Panel title="Saturation">
                         <OptimizedSlider
                             label="Saturation"
@@ -515,7 +506,7 @@ const ControlPanel = ({
                             unit="%"
                         />
                     </Panel>
-
+                    
                     <Panel title="Hue Shift">
                         <OptimizedSlider
                             label="Angle"
@@ -527,10 +518,10 @@ const ControlPanel = ({
                             unit="°"
                         />
                     </Panel>
-
                 </TabsContent>
             </Tabs>
-
+            
+            {/* Uploaded image notification */}
             {uploadedImage && (
                 <Alert className="mt-6">
                     <AlertDescription className="text-xs flex items-center justify-between">
@@ -539,10 +530,7 @@ const ControlPanel = ({
                             variant="ghost"
                             size="sm"
                             className="h-6 text-xs"
-                            onClick={() => {
-                                setUploadedImage(null)
-                                toast.success('Image removed from canvas.')
-                            }}
+                            onClick={handleRemoveImage}
                         >
                             Remove
                         </Button>
